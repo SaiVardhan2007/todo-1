@@ -1,7 +1,16 @@
 // boot the app + DB connection
 import "dotenv/config";        // loads .env into process.env
-import app from "./app.js";
+import express from "express";
+import cors from "cors";
+import todoRoutes from "./routes/todo.routes.js";
 import { connectDB } from "./config/db.js";
+
+const app = express();
+
+// Middlewares
+app.use(cors());            // allow browser apps to call this API
+app.use(express.json());    // parse JSON bodies
+
 
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URI;
@@ -25,3 +34,6 @@ async function main() {
 }
 
 main()
+
+// Routes
+app.use("/api/todos", todoRoutes);

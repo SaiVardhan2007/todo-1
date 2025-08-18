@@ -8,11 +8,10 @@ export async function createTodo(req: Request, res: Response) {
   try {
     const { title, completed } = req.body;
 
-    // very basic validation (keep it beginner-friendly)
     if (!title || typeof title !== "string") {
       return res.status(400).json({ error: "title must be a non-empty string" });
     }
-
+    
     const todo = await TodoModel.create({ title, completed });
     res.status(201).json(todo);
   } catch (err) {
