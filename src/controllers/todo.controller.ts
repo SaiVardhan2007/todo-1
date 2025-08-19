@@ -21,7 +21,7 @@ export async function createTodo(req: Request, res: Response) {
 }
 
 // Read all
-export async function getTodos(_req: Request, res: Response) {
+export async function getTodos(req: Request, res: Response) {
   try {
     const todos = await TodoModel.find().sort({ createdAt: -1 });
     res.json(todos);
@@ -48,7 +48,7 @@ export async function updateTodo(req: Request, res: Response) {
     const todo = await TodoModel.findByIdAndUpdate(
       req.params.id,
       { title, completed },
-      { new: true, runValidators: true }
+      { new: true}
     );
     if (!todo) return res.status(404).json({ error: "todo not found" });
     res.json(todo);
