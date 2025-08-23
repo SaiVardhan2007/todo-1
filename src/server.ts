@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import todoRoutes from "./routes/todo.routes.js";
 import { connectDB } from "./config/db.js";
+
+import authRoutes from "./routes/auth.route.js";
 import "dotenv/config";        // loads .env into process.env
 
 const app = express();
@@ -37,3 +39,4 @@ main()
 
 // Routes
 app.use("/api/todos", todoRoutes);
+app.use("/api/auth", authRoutes);
