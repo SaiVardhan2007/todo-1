@@ -9,7 +9,7 @@ const router = Router();
 router.get("/", authenticate, getTodos);
 router.get("/:id", authenticate, getTodoById);
 router.post("/", authenticate, createTodo);
-router.put("/:id",authenticate, updateTodo);
-router.delete("/:id",authenticate, deleteTodo);
+router.put("/:id", authenticate, updateTodo);
+router.delete("/:id", authenticate, deleteTodo);
 
 export default router;

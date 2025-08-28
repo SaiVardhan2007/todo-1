@@ -9,7 +9,8 @@ export interface User extends Document {
 const userSchema = new Schema<User>(
   {
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, match: /.+@.+\..+/ },
+
     password: { type: String, required: true }, // hashed password
   },
   { timestamps: true }

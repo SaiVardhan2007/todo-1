@@ -1,23 +1,29 @@
 import type { Request, Response, NextFunction } from "express";
-import jsonwebtoken from "jsonwebtoken";
-const jwt = jsonwebtoken;
+import jwt from "jsonwebtoken";
+
+interface JwtPayload {
+  id: string;
+  email: string;
+  iat?: number;
+  exp?: number;
+}
 
 interface AuthRequest extends Request {
-  user?: any;
+  user?: JwtPayload;
 }
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1]; // Bearer TOKEN
-  console.log("Token:", token);
-  if (!token) {
-    return res.status(401).json({ message: "No token provided" });
-  }
+  if (!token) return res.status(401).json({ message: "No token provided" });
+
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return res.status(500).json({ message: "JWT_SECRET not set" });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = jwt.verify(token, secret) as JwtPayload;
     req.user = decoded;
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
