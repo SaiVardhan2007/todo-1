@@ -1,4 +1,3 @@
-//  Mongoose schema/model
 import mongoose from "mongoose";
 
 export interface Todo {
@@ -8,7 +7,6 @@ export interface Todo {
   updatedAt?: Date;
 }
 
-// Define schema (timestamps adds createdAt/updatedAt automatically)
 const todoSchema = new mongoose.Schema<Todo>(
   {
     title: { type: String, required: true, trim: true },
@@ -17,5 +15,4 @@ const todoSchema = new mongoose.Schema<Todo>(
   { timestamps: true }
 );
 
-// Create model
 export const TodoModel = mongoose.model<Todo>("Todo", todoSchema);

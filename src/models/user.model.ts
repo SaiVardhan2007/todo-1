@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+const validator = require('validator');
 
 export interface User extends Document {
   username: string;
@@ -9,7 +10,11 @@ export interface User extends Document {
 const userSchema = new Schema<User>(
   {
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true, match: /.+@.+\..+/ },
+    email: { type: String,
+       required: true,
+        unique: true,
+        validate: [validator.isEmail, 'Invalid email'], // instead we can use: match: /.+@.+\..+/ 
+      },
 
     password: { type: String, required: true }, // hashed password
   },
