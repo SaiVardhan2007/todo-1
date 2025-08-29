@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-const validator = require('validator');
-
+import * as validator from "validator";
 export interface User extends Document {
   username: string;
   email: string;

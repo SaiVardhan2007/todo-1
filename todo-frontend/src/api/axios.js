@@ -1,37 +1,28 @@
 import axios from 'axios';
 
-// Create axios instance
+// Use proxy in dev ("/api"), allow override via VITE_API_BASE at build time
+const baseURL = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : '/api';
+
 const api = axios.create({
-  baseURL: 'http://localhost:4000/api', // Your backend URL
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL,
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor to add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-// Response interceptor to handle token expiration
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

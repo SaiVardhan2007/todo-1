@@ -35,8 +35,8 @@ export const login = async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return res.status(500).json({ message: "JWT_SECRET not set" });
+    const secret = process.env.JWT_SECRET || process.env.SECRET_KEY;
+    if (!secret) return res.status(500).json({ message: "JWT secret not set" });
 
     const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: "1h" });
     return res.json({ token, userId: user._id, username: user.username });
